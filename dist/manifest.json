@@ -1,0 +1,36 @@
+{
+    "manifest_version": 2,
+    "name": "Github Stars Preview",
+    "description": "Shows the amount of stars next to repository links",
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4yEyJRT7V0zt1h6f/opL6hIN2x+Qxc9Y9s9Vi78GVSOR4laJz983oeo8POd8WLn9xVsfUOM+aYXNpCI2qvK0uw1ghngVNdbJVNBLL7cUMtuZ1Am/WFMm776wCbEt74h0IrwKFgmAXqtgN9pRPlPU2sF7YqSgB5DnNvBsSD1sJKhFqzhIvOrpbBuSNTlbvyX2IHojdBt6U7lXvmflWRcBcKn9ItddPzLiheR3vAWsl9husyixq7mY3orq4wuvWxSWg/2zkaqP8e4BTnFMkfYpLizV1LfnPEl0TxM+2l4wSSfQw1EkgiLA+SiCPHu/m3+SkajQFE9p5DmzGz9DLQ9AcQIDAQAB",
+    "version": "1.0.0",
+
+    "browser_action": {
+        "default_title": "GitHub Stars Preview",
+        "default_icon": "icon16.png"
+    },
+
+    "background": {
+        "scripts": ["js/background.js"],
+        "persistent": false
+    },
+
+    "icons": {
+        "16": "icon16.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
+    },
+
+    "permissions": [
+        "identity",
+        "activeTab",
+        "http://*/*",
+        "https://*/*",
+        "storage"
+    ],
+
+    "oauth2": {
+        "client_id": "Iv1.c527d7bec6efac37",
+        "scopes": [""]
+    }
+}
