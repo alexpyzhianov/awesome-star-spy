@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "strict": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "name": "awesome-star-spy",
+    "version": "1.0.0",
+    "description": "A Chrome extension for awesome-star-spy",
+    "scripts": {
+        "build": "webpack --config webpack.prod.js",
+        "start": "webpack -w --config webpack.dev.js",
+        "test": "echo \"No tests found\""
+    },
+    "author": "Alex Pyzhianov <alex.pyzhianov@gmail.com>",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/chrome": "^0.0.60",
+        "@types/qs": "^6.9.2",
+        "@types/react": "^16.9.32",
+        "@types/react-dom": "^16.9.6",
+        "css-loader": "^3.4.2",
+        "node-sass": "^4.13.1",
+        "style-loader": "^0.20.3",
+        "ts-loader": "^4.0.1",
+        "typescript": "^3.8.0",
+        "webpack": "^4.42.1",
+        "webpack-cli": "^3.3.11",
+        "webpack-merge": "^4.2.2"
+    },
+    "dependencies": {
+        "qs": "^6.9.4",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1"
+    }
+}

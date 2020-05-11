@@ -1,6 +1,6 @@
 declare var githubToken: string;
 
-console.log(githubToken, window.githubToken);
+console.log(githubToken);
 
 const linkRegex = /https:\/\/github\.com\/[-\.\w\d]+\/[-\.\w\d]+$/; // https://github.com/<org>/<repo>
 

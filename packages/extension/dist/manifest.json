@@ -7,6 +7,7 @@
 
     "browser_action": {
         "default_title": "Awesome Star Spy",
+        "default_popup": "popup.html",
         "default_icon": "icon16.png"
     },
 
@@ -30,7 +31,7 @@
     ],
 
     "oauth2": {
-        "client_id": "Iv1.c527d7bec6efac37",
+        "client_id": "Iv1.097b63d40eafa56c",
         "scopes": [""]
     }
 }
