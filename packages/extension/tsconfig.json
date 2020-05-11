@@ -1,6 +1,10 @@
 {
-    "extends": "../../tsconfig.base.json",
     "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "strict": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
         "jsx": "react",
         "lib": ["es2015", "dom"],
         "outDir": "dist/js",

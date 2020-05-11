@@ -1,6 +1,10 @@
 {
-    "extends": "../../tsconfig.base.json",
     "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "strict": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
         "outDir": "dist",
         "rootDir": "src",
         "target": "es2019"

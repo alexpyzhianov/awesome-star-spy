@@ -4094,7 +4094,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.8.0:
+typescript@^3.8.0, typescript@^3.8.3:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
   integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
@@ -4320,6 +4320,11 @@ wide-align@^1.1.0:
   integrity sha512-QGkOQc8XL6Bt5PwnsExKBPuMKBxnGxWWW3fU55Xt4feHozMUhdUMaBCk290qpm/wG5u/RSKzwdAC4i51YigihA==
   dependencies:
     string-width "^1.0.2 || 2"
+
+wingcss@^1.0.0-beta:
+  version "1.0.0-beta"
+  resolved "https://registry.yarnpkg.com/wingcss/-/wingcss-1.0.0-beta.tgz#0d2ec3267e91b47c76eb3c02069765e7953ccc1d"
+  integrity sha1-DS7DJn6RtHx26zwCBpdl55U8zB0=
 
 worker-farm@^1.7.0:
   version "1.7.0"
