@@ -1,7 +1,5 @@
 declare var githubToken: string;
 
-console.log(githubToken);
-
 const linkRegex = /https:\/\/github\.com\/[-\.\w\d]+\/[-\.\w\d]+$/; // https://github.com/<org>/<repo>
 
 const links: HTMLAnchorElement[] = Array.prototype.slice.call(
@@ -24,11 +22,13 @@ githubLinks.forEach((link) => {
             .then((resp) => resp.json())
             .then((body) => {
                 const star = document.createElement("span");
-                Object.assign(star.style, { color: "black" });
                 star.innerText = ` ⭐️(${body ? body.stargazers_count : "?"})`;
                 link.appendChild(star);
             });
     }
 });
 
-console.log(githubLinks.map(({ href }) => href));
+console.log(
+    "Getting stars for urls:",
+    githubLinks.map(({ href }) => href),
+);

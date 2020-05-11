@@ -7,7 +7,9 @@ function send(type: MessageType) {
 }
 
 export default function Popup() {
+    const [tabId, setTabId] = React.useState<number>();
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+    const [starSpyActive, setStarSpyActive] = React.useState(false);
 
     useEffect(() => {
         send(MessageType.INIT);
@@ -31,20 +33,35 @@ export default function Popup() {
     });
 
     return (
-        <div className="popupContainer">
-            {isLoggedIn ? (
-                <button onClick={() => send(MessageType.SIGN_OUT)}>
-                    Sign Out
-                </button>
-            ) : (
-                <button onClick={() => send(MessageType.SIGN_IN)}>
-                    Sign In
+        <div className="container">
+            {isLoggedIn && (
+                <button
+                    className="button"
+                    onClick={() => {
+                        send(MessageType.DISPLAY_STARS);
+                        setStarSpyActive(true);
+                    }}
+                    disabled={starSpyActive}
+                >
+                    Show Stars
                 </button>
             )}
 
-            <button onClick={() => send(MessageType.DISPLAY_STARS)}>
-                Display Stars
-            </button>
+            {isLoggedIn ? (
+                <button
+                    className="button outline"
+                    onClick={() => send(MessageType.SIGN_OUT)}
+                >
+                    Sign Out
+                </button>
+            ) : (
+                <button
+                    className="button"
+                    onClick={() => send(MessageType.SIGN_IN)}
+                >
+                    Sign In
+                </button>
+            )}
         </div>
     );
 }

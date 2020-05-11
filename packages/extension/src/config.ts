@@ -5,6 +5,7 @@ export enum MessageType {
     SIGN_OUT = "SIGN_OUT",
     SIGN_OUT_SUCCESS = "SIGN_OUT_SUCCESS",
     DISPLAY_STARS = "DISPLAY_STARS",
+    DISPLAY_STARS_SUCCESS = "DISPLAY_STARS_SUCCESS",
 }
 
 export const TOKEN_KEY = "ghToken";
