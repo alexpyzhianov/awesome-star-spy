@@ -1,7 +1,6 @@
 import qs from "qs";
-import { MessageType } from "./config";
+import { MessageType, TOKEN_KEY } from "./config";
 
-const TOKEN_KEY = "ghToken";
 const API_ENDPOINT = process.env.PRODUCTION
     ? "http://starspy.alexpyzhianov.com:8080"
     : "http://localhost:8080";
@@ -39,6 +38,9 @@ function onLogin(redirectUrl?: string) {
             const token = body && body.access_token;
             if (token) {
                 console.log("Login successful");
+                chrome.runtime.sendMessage({
+                    type: MessageType.SIGN_IN_SUCCESS,
+                });
                 chrome.storage.local.set({ [TOKEN_KEY]: token });
             } else {
                 console.warn("No access_token inside body");
@@ -78,7 +80,8 @@ function signIn() {
 }
 
 function signOut() {
-    console.warn("Not implemented");
+    chrome.storage.local.remove(TOKEN_KEY);
+    chrome.runtime.sendMessage({ type: MessageType.SIGN_OUT_SUCCESS });
 }
 
 function displayStars() {
