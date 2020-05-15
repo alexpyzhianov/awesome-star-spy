@@ -16,13 +16,11 @@ export type Message =
     | { type: MessageType.SHOW_STARS };
 
 export function sendMessage(msg: Message) {
-    console.log("Sending message ", msg.type);
     chrome.runtime.sendMessage(msg);
 }
 
 export function onMessage(cb: (msg: Message) => void) {
     chrome.runtime.onMessage.addListener((msg: Message) => {
-        console.log("Received message ", msg.type);
         cb(msg);
     });
 }

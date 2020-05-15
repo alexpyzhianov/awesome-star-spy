@@ -8,7 +8,5 @@ GitHub API allows only 60 requests per hour for unauthorized users. It's usually
 
 ## TODO:
 
-[ ] Add options
-[ ] Add Language option
-[ ] Add Last-Commit option
+[ ] Handle redirects
 [ ] Add event-based analytics

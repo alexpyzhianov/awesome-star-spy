@@ -9,8 +9,6 @@ function onLogin(redirectUrl?: string) {
         return console.error("Failed to login");
     }
 
-    console.log("Received non-empty redirect url");
-
     const [, urlQuery] = redirectUrl.split("?");
     const { code, state } = qs.parse(urlQuery);
 
@@ -29,7 +27,6 @@ function onLogin(redirectUrl?: string) {
     })
         .then((resp) => resp.json())
         .then((body) => {
-            console.log(body);
             const token = body && body.access_token;
 
             if (!token) {

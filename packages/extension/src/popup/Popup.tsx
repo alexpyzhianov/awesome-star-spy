@@ -4,6 +4,7 @@ import "./Popup.css";
 
 export default function Popup() {
     const [linksFound, setLinksFound] = React.useState<number>();
+    const [clicked, setClicked] = React.useState(false);
 
     useEffect(() => {
         chrome.runtime.connect();
@@ -17,11 +18,15 @@ export default function Popup() {
     return (
         <div className="container">
             <p>
-                Links found: <strong>{linksFound ?? "?"}</strong>
+                GitHub links found: <strong>{linksFound ?? "?"}</strong>
             </p>
             <button
                 className="button"
-                onClick={() => sendMessage({ type: MessageType.SHOW_STARS })}
+                onClick={() => {
+                    sendMessage({ type: MessageType.SHOW_STARS });
+                    setClicked(true);
+                }}
+                disabled={clicked}
             >
                 Show Stars
             </button>
