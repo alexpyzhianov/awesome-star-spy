@@ -1,30 +1,24 @@
 import qs from "qs";
-import { MessageType, TOKEN_KEY } from "./config";
-
-const API_ENDPOINT = process.env.PRODUCTION
-    ? "http://starspy.alexpyzhianov.com:8080"
-    : "http://localhost:8080";
+import { MessageType, TOKEN_KEY } from "./utils";
 
 const STATE = `${Math.random().toString()}-${Date.now().toString()}-${Math.random().toString()}`;
+const API_ENDPOINT = "https://starspy.alexpyzhianov.com";
 
 function onLogin(redirectUrl?: string) {
-    console.log("Received redirect url", redirectUrl);
-
     if (!redirectUrl) {
         return console.error("Failed to login");
     }
 
+    console.log("Received non-empty redirect url");
+
     const [, urlQuery] = redirectUrl.split("?");
     const { code, state } = qs.parse(urlQuery);
-
-    console.log({ code, state });
 
     if (state !== STATE) {
         return console.error("States do not match");
     }
 
     const tokenEndpoint = API_ENDPOINT + "/token";
-    console.log("Using access_token endpoint", tokenEndpoint);
 
     fetch(tokenEndpoint, {
         method: "POST",
@@ -35,84 +29,71 @@ function onLogin(redirectUrl?: string) {
     })
         .then((resp) => resp.json())
         .then((body) => {
+            console.log(body);
             const token = body && body.access_token;
-            if (token) {
-                console.log("Login successful");
-                chrome.runtime.sendMessage({
-                    type: MessageType.SIGN_IN_SUCCESS,
-                });
-                chrome.storage.local.set({ [TOKEN_KEY]: token });
-            } else {
-                console.warn("No access_token inside body");
-                console.log(body);
-            }
-        })
-        .catch(console.error);
-}
 
-function signIn() {
-    const clientIdEndpoint = API_ENDPOINT + "/client_id";
-    console.log("Using client_id endpoint", clientIdEndpoint);
-
-    fetch(clientIdEndpoint)
-        .then((response) => response.json())
-        .then((body) => {
-            const clientId = body && body.client_id;
-            if (!clientId) {
-                return console.warn("No client_id in response");
+            if (!token) {
+                console.error("No access token inside body");
+                return;
             }
 
-            console.log("Received clientId", clientId);
-            console.log("Using state", STATE);
-
-            const query = qs.stringify({
-                client_id: clientId,
-                state: STATE,
-            });
-
-            const authUrl = `https://github.com/login/oauth/authorize?${query}`;
-
-            chrome.identity.launchWebAuthFlow(
-                { url: authUrl, interactive: true },
-                onLogin,
+            chrome.tabs.executeScript(
+                { code: `window.${TOKEN_KEY} = "${token}"` },
+                () => {
+                    chrome.tabs.executeScript({
+                        file: "js/showStars.js",
+                    });
+                },
             );
         });
 }
 
-function signOut() {
-    chrome.storage.local.remove(TOKEN_KEY);
-    chrome.runtime.sendMessage({ type: MessageType.SIGN_OUT_SUCCESS });
+function fetchClientId() {
+    const clientIdEndpoint = API_ENDPOINT + "/client_id";
+
+    return fetch(clientIdEndpoint)
+        .then((response) => response.json())
+        .then((body) => {
+            const clientId = body && body.client_id;
+            if (!clientId) {
+                return console.error("No client_id in response");
+            }
+
+            return clientId;
+        });
 }
 
-function displayStars() {
-    chrome.storage.local.get((items) => {
-        if (!items[TOKEN_KEY]) {
-            console.warn("Please authorize with GitHub to display stars");
-        }
-
-        chrome.tabs.executeScript(
-            { code: `var githubToken = "${items[TOKEN_KEY]}"` },
-            () => {
-                chrome.tabs.executeScript({
-                    file: "js/content.js",
-                });
-            },
-        );
+function launchWebAuthFlow(clientId: string) {
+    const query = qs.stringify({
+        client_id: clientId,
+        state: STATE,
     });
+
+    const authUrl = `https://github.com/login/oauth/authorize?${query}`;
+
+    chrome.identity.launchWebAuthFlow(
+        { url: authUrl, interactive: true },
+        onLogin,
+    );
 }
+
+chrome.runtime.onConnect.addListener((port) => {
+    chrome.tabs.executeScript({
+        file: "js/gatherStars.js",
+    });
+
+    port.onDisconnect.addListener(() => {
+        // return chrome.tabs.executeScript({
+        //     file: "js/cleanUp.js",
+        // });
+    });
+});
 
 chrome.runtime.onMessage.addListener(({ type }) => {
     switch (type) {
-        case MessageType.INIT:
-            return console.log("Awesome Star Spy init successful");
-        case MessageType.SIGN_IN:
-            return signIn();
-        case MessageType.SIGN_OUT:
-            return signOut();
-        case MessageType.DISPLAY_STARS:
-            return displayStars();
+        case MessageType.SHOW_STARS:
+            return fetchClientId().then(launchWebAuthFlow);
         default:
-            console.warn("Unknown message " + type);
             return;
     }
 });
