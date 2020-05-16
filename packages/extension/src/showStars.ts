@@ -1,6 +1,6 @@
 import formatRelative from "date-fns/formatRelative";
 import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
-import { POINTER_CLASS, LINK_CLASS, TOKEN_KEY } from "./utils";
+import { POINTER_CLASS, LINK_CLASS, TOKEN_KEY, formatStarCount } from "./utils";
 import { sendMessage, MessageType } from "./messaging";
 import { AnalyticsEventType } from "./analytics";
 
@@ -57,7 +57,9 @@ function fetchRepoData(url: string): Promise<Record<string, any>> {
 }
 
 function getLabel(stars: number, pushedAt?: Date, lang?: string) {
-    let output = ` ${getStarEmojis(stars)} ${stars ?? "?"}`;
+    let output = ` ${getStarEmojis(stars)} ${
+        stars ? formatStarCount(stars) : "?"
+    }`;
 
     if (pushedAt) {
         output += ` ${getFreshEmoji(pushedAt)} ${formatRelative(

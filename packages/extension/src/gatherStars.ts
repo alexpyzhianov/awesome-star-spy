@@ -5,12 +5,15 @@ const allLinks: HTMLAnchorElement[] = Array.prototype.slice.call(
     document.querySelectorAll("a"),
 );
 
+const ignoreAuthors = ["topics", "site"];
+
 const repoLinks = allLinks.filter(({ href }) => {
     const [, , gh, author, repo, more] = href.split("/");
+
     return (
         gh === "github.com" &&
         Boolean(author) &&
-        author !== "topics" &&
+        !ignoreAuthors.includes(author) &&
         Boolean(repo) &&
         !more
     );
