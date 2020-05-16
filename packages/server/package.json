@@ -7,6 +7,7 @@
     "license": "MIT",
     "scripts": {
         "build": "tsc",
+        "start": "source .env && yarn build && node dist/index.js",
         "test": "echo \"No tests found\""
     },
     "dependencies": {
