@@ -1,18 +1,12 @@
 import express from "express";
 import morgan from "morgan";
 import http from "http";
-import https from "https";
-import fs from "fs";
 import got from "got";
 import qs from "qs";
 
 const app = express();
 
-const keyFile = "key.pem";
-const certFile = "cert.pem";
-
 const PORT_HTTP = process.env.PORT_HTTP ?? 8080;
-const PORT_HTTPS = process.env.PORT_HTTPS ?? 8443;
 
 const clientId = process.env.GH_CLIENT_ID ?? "test";
 const clientSecret = process.env.GH_CLIENT_SECRET ?? "test";
@@ -20,17 +14,15 @@ const clientSecret = process.env.GH_CLIENT_SECRET ?? "test";
 app.use(express.json());
 app.use(morgan("common"));
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
     res.sendStatus(418);
 });
 
-app.get("/client_id", (req, res) => {
+app.get("/client_id", (_req, res) => {
     res.send({ client_id: clientId });
 });
 
-app.post("/token", (req, res) => {
-    console.log(req.body);
-
+app.post("/token", async (req, res) => {
     const { code } = req.body;
 
     if (!code) {
@@ -38,30 +30,22 @@ app.post("/token", (req, res) => {
         return res.status(401).send({ error: "Missing code" });
     }
 
-    const query = qs.stringify({
-        client_id: clientId,
-        client_secret: clientSecret,
-        code,
-    });
+    const { body: tokenResponse } = await got.post(
+        `https://github.com/login/oauth/access_token?${qs.stringify({
+            client_id: clientId,
+            client_secret: clientSecret,
+            code,
+        })}`,
+        { method: "POST" },
+    );
 
-    console.log("Code step", { code, query });
+    if (!tokenResponse) {
+        return console.error("No body in response from /access_token");
+    }
 
-    return got
-        .post(`https://github.com/login/oauth/access_token?${query}`, {
-            method: "POST",
-        })
-        .then(({ body }) => {
-            if (!body) {
-                return console.error("No body in response");
-            }
+    const { access_token } = qs.parse(tokenResponse);
 
-            const { access_token } = qs.parse(body);
-            res.send({ access_token });
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(403).send("GitHub auth failed");
-        });
+    res.send({ access_token });
 });
 
 const httpServer = http.createServer(app);
@@ -69,17 +53,3 @@ const httpServer = http.createServer(app);
 httpServer.listen(PORT_HTTP, () => {
     console.log("serving over http at", PORT_HTTP);
 });
-
-if (fs.existsSync(keyFile) && fs.existsSync(certFile)) {
-    const ssl = {
-        key: fs.readFileSync(keyFile),
-        cert: fs.readFileSync(certFile),
-    };
-
-    const httpsServer = https.createServer(ssl, app);
-    httpsServer.listen(PORT_HTTPS, () => {
-        console.log("serving over https at", PORT_HTTPS);
-    });
-} else {
-    console.warn("No SSL key or cert found");
-}
