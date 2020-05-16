@@ -1,27 +1,20 @@
-import {
-    sendMessage,
-    MessageType,
-    POINTER_CLASS,
-    LINK_CLASS,
-    uniqueLinks,
-} from "./utils";
+import { POINTER_CLASS, LINK_CLASS } from "./utils";
+import { sendMessage, MessageType } from "./messaging";
 
 const allLinks: HTMLAnchorElement[] = Array.prototype.slice.call(
     document.querySelectorAll("a"),
 );
 
-const repoLinks = uniqueLinks(
-    allLinks.filter(({ href }) => {
-        const [, , gh, author, repo, more] = href.split("/");
-        return (
-            gh === "github.com" &&
-            Boolean(author) &&
-            author !== "topics" &&
-            Boolean(repo) &&
-            !more
-        );
-    }),
-);
+const repoLinks = allLinks.filter(({ href }) => {
+    const [, , gh, author, repo, more] = href.split("/");
+    return (
+        gh === "github.com" &&
+        Boolean(author) &&
+        author !== "topics" &&
+        Boolean(repo) &&
+        !more
+    );
+});
 
 repoLinks.forEach((link) => {
     if (link.classList.contains(LINK_CLASS)) {
@@ -30,7 +23,7 @@ repoLinks.forEach((link) => {
 
     const point = document.createElement("span");
     point.classList.add(POINTER_CLASS);
-    point.innerText = " ⭐️";
+    point.innerText = " ️🎯";
 
     link.appendChild(point);
     link.classList.add(LINK_CLASS);

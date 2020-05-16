@@ -1,10 +1,19 @@
 import qs from "qs";
-import { MessageType, TOKEN_KEY } from "./utils";
+import { initAnalytics, logEvent, AnalyticsEventType } from "./analytics";
+import { MessageType, Message } from "./messaging";
+import { TOKEN_KEY } from "./utils";
 
 const STATE = `${Math.random().toString()}-${Date.now().toString()}-${Math.random().toString()}`;
 const API_ENDPOINT = "https://starspy.alexpyzhianov.com";
 
-function onLogin(redirectUrl?: string) {
+initAnalytics();
+
+async function onLogin(redirectUrl?: string) {
+    logEvent({
+        type: AnalyticsEventType.REDIRECT_STEP,
+        data: { success: Boolean(redirectUrl) },
+    });
+
     if (!redirectUrl) {
         return console.error("Failed to login");
     }
@@ -18,46 +27,55 @@ function onLogin(redirectUrl?: string) {
 
     const tokenEndpoint = API_ENDPOINT + "/token";
 
-    fetch(tokenEndpoint, {
+    const response = await fetch(tokenEndpoint, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ code }),
-    })
-        .then((resp) => resp.json())
-        .then((body) => {
-            const token = body && body.access_token;
+    }).then((resp) => resp.json());
 
-            if (!token) {
-                console.error("No access token inside body");
-                return;
-            }
+    const token = response && response.access_token;
 
-            chrome.tabs.executeScript(
-                { code: `window.${TOKEN_KEY} = "${token}"` },
-                () => {
-                    chrome.tabs.executeScript({
-                        file: "js/showStars.js",
-                    });
-                },
-            );
-        });
+    logEvent({
+        type: AnalyticsEventType.TOKEN_STEP,
+        data: { success: Boolean(token) },
+    });
+
+    if (!token) {
+        console.error("No access token inside body");
+        return;
+    }
+
+    chrome.tabs.executeScript(
+        { code: `window.${TOKEN_KEY} = "${token}"` },
+        () => {
+            chrome.tabs.executeScript({
+                file: "js/showStars.js",
+            });
+        },
+    );
 }
 
-function fetchClientId() {
+async function fetchClientId() {
     const clientIdEndpoint = API_ENDPOINT + "/client_id";
 
-    return fetch(clientIdEndpoint)
-        .then((response) => response.json())
-        .then((body) => {
-            const clientId = body && body.client_id;
-            if (!clientId) {
-                return console.error("No client_id in response");
-            }
+    const response = await fetch(clientIdEndpoint).then((response) =>
+        response.json(),
+    );
 
-            return clientId;
-        });
+    const clientId = response && response.client_id;
+
+    logEvent({
+        type: AnalyticsEventType.CLIENT_ID_STEP,
+        data: { success: Boolean(clientId) },
+    });
+
+    if (!clientId) {
+        return console.error("No client_id in response");
+    }
+
+    return clientId;
 }
 
 function launchWebAuthFlow(clientId: string) {
@@ -80,16 +98,19 @@ chrome.runtime.onConnect.addListener((port) => {
     });
 
     port.onDisconnect.addListener(() => {
+        logEvent({ type: AnalyticsEventType.POPUP_CONNECTION_LOST });
         // return chrome.tabs.executeScript({
         //     file: "js/cleanUp.js",
         // });
     });
 });
 
-chrome.runtime.onMessage.addListener(({ type }) => {
-    switch (type) {
+chrome.runtime.onMessage.addListener((msg: Message) => {
+    switch (msg.type) {
         case MessageType.SHOW_STARS:
             return fetchClientId().then(launchWebAuthFlow);
+        case MessageType.LOG_EVENT:
+            return logEvent(msg.event);
         default:
             return;
     }

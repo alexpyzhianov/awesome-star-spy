@@ -1,6 +1,8 @@
 import formatRelative from "date-fns/formatRelative";
 import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
 import { POINTER_CLASS, LINK_CLASS, TOKEN_KEY } from "./utils";
+import { sendMessage, MessageType } from "./messaging";
+import { AnalyticsEventType } from "./analytics";
 
 const now = new Date();
 
@@ -98,6 +100,15 @@ links.forEach((link) => {
             }
 
             star.style.fontSize = "inherit";
+            star.addEventListener("click", () => {
+                sendMessage({
+                    type: MessageType.LOG_EVENT,
+                    event: {
+                        type: AnalyticsEventType.LINK_FOLLOW,
+                        data: { starCount, lang, pushedAt },
+                    },
+                });
+            });
         },
     );
 });
