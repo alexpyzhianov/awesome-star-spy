@@ -2,7 +2,6 @@
     "manifest_version": 2,
     "name": "Awesome Star Spy",
     "description": "Preview GitHub stars of every repository in an awesome list",
-    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4yEyJRT7V0zt1h6f/opL6hIN2x+Qxc9Y9s9Vi78GVSOR4laJz983oeo8POd8WLn9xVsfUOM+aYXNpCI2qvK0uw1ghngVNdbJVNBLL7cUMtuZ1Am/WFMm776wCbEt74h0IrwKFgmAXqtgN9pRPlPU2sF7YqSgB5DnNvBsSD1sJKhFqzhIvOrpbBuSNTlbvyX2IHojdBt6U7lXvmflWRcBcKn9ItddPzLiheR3vAWsl9husyixq7mY3orq4wuvWxSWg/2zkaqP8e4BTnFMkfYpLizV1LfnPEl0TxM+2l4wSSfQw1EkgiLA+SiCPHu/m3+SkajQFE9p5DmzGz9DLQ9AcQIDAQAB",
     "version": "1.0.0",
 
     "browser_action": {
@@ -25,14 +24,8 @@
     "permissions": [
         "identity",
         "activeTab",
-        "tabs",
         "http://*/*",
         "https://*/*",
         "storage"
-    ],
-
-    "oauth2": {
-        "client_id": "Iv1.097b63d40eafa56c",
-        "scopes": [""]
-    }
+    ]
 }
