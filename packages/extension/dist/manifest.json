@@ -21,11 +21,5 @@
         "128": "icon128.png"
     },
 
-    "permissions": [
-        "identity",
-        "activeTab",
-        "http://*/*",
-        "https://*/*",
-        "storage"
-    ]
+    "permissions": ["identity", "activeTab", "storage"]
 }
