@@ -38,3 +38,7 @@ export function logEvent(event: AnalyticsEvent) {
         analyticsClient.logEvent(event.type);
     }
 }
+
+export function optOutAnalytics(optOut: boolean) {
+    analyticsClient.setOptOut(optOut);
+}

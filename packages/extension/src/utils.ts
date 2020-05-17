@@ -1,6 +1,7 @@
 export const LINK_CLASS = "star-spy-link";
 export const POINTER_CLASS = "star-spy-pointer";
 export const TOKEN_KEY = "_starSpyKey";
+export const OPT_OUT_ANALYTICS = "starSpyOptOutAnalytics";
 
 export function formatStarCount(num: number) {
     let [int] = num.toString().split(".");

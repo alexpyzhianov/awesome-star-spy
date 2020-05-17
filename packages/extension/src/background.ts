@@ -1,12 +1,15 @@
 import qs from "qs";
-import { initAnalytics, logEvent, AnalyticsEventType } from "./analytics";
+import {
+    initAnalytics,
+    logEvent,
+    AnalyticsEventType,
+    optOutAnalytics,
+} from "./analytics";
 import { MessageType, Message } from "./messaging";
-import { TOKEN_KEY } from "./utils";
+import { TOKEN_KEY, OPT_OUT_ANALYTICS } from "./utils";
 
 const STATE = `${Math.random().toString()}-${Date.now().toString()}-${Math.random().toString()}`;
 const API_ENDPOINT = "https://starspy.alexpyzhianov.com";
-
-initAnalytics();
 
 async function onLogin(redirectUrl?: string) {
     logEvent({
@@ -92,6 +95,21 @@ function launchWebAuthFlow(clientId: string) {
     );
 }
 
+function onOptOutAnalytics(optOut: boolean) {
+    optOutAnalytics(optOut);
+    if (optOut) {
+        chrome.storage.local.set({ [OPT_OUT_ANALYTICS]: true });
+    } else {
+        chrome.storage.local.remove(OPT_OUT_ANALYTICS);
+    }
+}
+
+chrome.storage.local.get((items) => {
+    if (!items[OPT_OUT_ANALYTICS]) {
+        initAnalytics();
+    }
+});
+
 chrome.runtime.onConnect.addListener((port) => {
     chrome.tabs.executeScript({
         file: "js/gatherStars.js",
@@ -111,6 +129,8 @@ chrome.runtime.onMessage.addListener((msg: Message) => {
             return fetchClientId().then(launchWebAuthFlow);
         case MessageType.LOG_EVENT:
             return logEvent(msg.event);
+        case MessageType.OPT_OUT_ANALYTICS:
+            return onOptOutAnalytics(msg.optOut);
         default:
             return;
     }
