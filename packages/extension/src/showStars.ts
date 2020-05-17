@@ -30,18 +30,18 @@ function getStarEmojis(count: number) {
     return stars;
 }
 
-function getFreshEmoji(date: Date) {
-    const diff = differenceInCalendarDays(now, date);
+function getFreshEmoji(pushedAt: Date) {
+    const daysSinceUpdate = differenceInCalendarDays(now, pushedAt);
 
-    if (diff < 10) {
+    if (daysSinceUpdate < 10) {
         return "🔥";
-    } else if (diff < 60) {
+    } else if (daysSinceUpdate < 60) {
         return "☀️";
-    } else if (diff < 120) {
+    } else if (daysSinceUpdate < 120) {
         return "️⛅️";
-    } else if (diff < 180) {
+    } else if (daysSinceUpdate < 180) {
         return "☁️";
-    } else if (diff < 360) {
+    } else if (daysSinceUpdate < 360) {
         return "🌧";
     } else {
         return "❄️";
@@ -107,7 +107,13 @@ links.forEach((link) => {
                     type: MessageType.LOG_EVENT,
                     event: {
                         type: AnalyticsEventType.LINK_FOLLOW,
-                        data: { starCount, lang, pushedAt },
+                        data: {
+                            starCount,
+                            lang,
+                            daysSinceUpdate: pushedAt
+                                ? differenceInCalendarDays(now, pushedAt)
+                                : undefined,
+                        },
                     },
                 });
             });

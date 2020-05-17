@@ -24,7 +24,7 @@ export type AnalyticsEvent =
       }
     | {
           type: AnalyticsEventType.LINK_FOLLOW;
-          data: { starCount: number; lang?: string; pushedAt?: Date };
+          data: { starCount: number; lang?: string; daysSinceUpdate?: number };
       };
 
 export function initAnalytics() {

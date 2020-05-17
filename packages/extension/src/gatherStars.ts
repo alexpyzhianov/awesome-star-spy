@@ -1,4 +1,4 @@
-import { POINTER_CLASS, LINK_CLASS } from "./utils";
+import { POINTER_CLASS, LINK_CLASS, getUniqueLinks } from "./utils";
 import { sendMessage, MessageType } from "./messaging";
 
 const allLinks: HTMLAnchorElement[] = Array.prototype.slice.call(
@@ -7,17 +7,19 @@ const allLinks: HTMLAnchorElement[] = Array.prototype.slice.call(
 
 const ignoreAuthors = ["topics", "site"];
 
-const repoLinks = allLinks.filter(({ href }) => {
-    const [, , gh, author, repo, more] = href.split("/");
+const repoLinks = getUniqueLinks(
+    allLinks.reverse().filter(({ href }) => {
+        const [, , gh, author, repo, more] = href.split("/");
 
-    return (
-        gh === "github.com" &&
-        Boolean(author) &&
-        !ignoreAuthors.includes(author) &&
-        Boolean(repo) &&
-        !more
-    );
-});
+        return (
+            gh === "github.com" &&
+            Boolean(author) &&
+            !ignoreAuthors.includes(author) &&
+            Boolean(repo) &&
+            !more
+        );
+    }),
+);
 
 repoLinks.forEach((link) => {
     if (link.classList.contains(LINK_CLASS)) {

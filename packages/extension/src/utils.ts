@@ -7,3 +7,12 @@ export function formatStarCount(num: number) {
     int = int.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return int;
 }
+
+export function getUniqueLinks(links: HTMLAnchorElement[]) {
+    const unique = {} as Record<string, HTMLAnchorElement>;
+    links.forEach((a) => {
+        const [url, hash] = a.href.split("#");
+        unique[url] = a;
+    });
+    return Object.values(unique);
+}
