@@ -5,7 +5,7 @@ const allLinks: HTMLAnchorElement[] = Array.prototype.slice.call(
     document.querySelectorAll("a"),
 );
 
-const ignoreAuthors = ["topics", "site"];
+const ignoreAuthors = ["topics", "site", "new", "organizations", "settings"];
 
 const repoLinks = getUniqueLinks(
     allLinks.reverse().filter(({ href }) => {
