@@ -8,6 +8,7 @@ export enum AnalyticsEventType {
     CLIENT_ID_STEP = "CLIENT_ID_STEP",
     TOKEN_STEP = "TOKEN_STEP",
     REDIRECT_STEP = "REDIRECT_STEP",
+    OPT_OUT = "OPT_OUT",
     SHOW_STARS_CLICK = "SHOW_STARS_CLICK",
     LINK_FOLLOW = "LINK_FOLLOW",
 }
@@ -18,6 +19,7 @@ export type AnalyticsEvent =
     | { type: AnalyticsEventType.CLIENT_ID_STEP; data: { success: boolean } }
     | { type: AnalyticsEventType.REDIRECT_STEP; data: { success: boolean } }
     | { type: AnalyticsEventType.TOKEN_STEP; data: { success: boolean } }
+    | { type: AnalyticsEventType.OPT_OUT; data: { optOut: boolean } }
     | {
           type: AnalyticsEventType.SHOW_STARS_CLICK;
           data: { urlsCount?: number };

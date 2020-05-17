@@ -96,6 +96,7 @@ function launchWebAuthFlow(clientId: string) {
 }
 
 function onOptOutAnalytics(optOut: boolean) {
+    logEvent({ type: AnalyticsEventType.OPT_OUT, data: { optOut } });
     optOutAnalytics(optOut);
     if (optOut) {
         chrome.storage.local.set({ [OPT_OUT_ANALYTICS]: true });
