@@ -34,7 +34,7 @@ export default function Popup() {
         <div className="popup">
             <p>
                 GitHub&nbsp;urls&nbsp;found:&nbsp;
-                <strong>{linksFound ?? "?"}</strong>
+                <strong>{linksFound ?? "..."}</strong>
             </p>
             <button
                 className="button"

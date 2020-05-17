@@ -58,7 +58,7 @@ function fetchRepoData(url: string): Promise<Record<string, any>> {
 
 function getLabel(stars: number, pushedAt?: Date, lang?: string) {
     let output = ` ${getStarEmojis(stars)} ${
-        stars ? formatStarCount(stars) : "?"
+        typeof stars === "number" ? formatStarCount(stars) : "?"
     }`;
 
     if (pushedAt) {
