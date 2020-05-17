@@ -5,7 +5,3 @@ It's a Chrome extension that uses GitHub API to fetch GitHub stars for every lin
 ## Why does this require authentication?
 
 GitHub API allows only 60 requests per hour for unauthorized users. It's usually not enough for even a tiny Awesome list. Authorizing the Awesome Star Spy's Github application doesn't give it access to anything you own and gives you 5000 requests/hour.
-
-## TODO:
-
-[ ] Handle redirects
