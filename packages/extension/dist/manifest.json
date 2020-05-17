@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Awesome Star Spy",
     "description": "Preview GitHub stars of every repository in an awesome list",
-    "version": "1.0.0",
+    "version": "1.0.1",
 
     "browser_action": {
         "default_title": "Awesome Star Spy",
