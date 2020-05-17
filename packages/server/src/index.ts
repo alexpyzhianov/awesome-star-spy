@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import http from "http";
+import cors from "cors";
 import got from "got";
 import qs from "qs";
 
@@ -13,6 +14,7 @@ const clientSecret = process.env.GH_CLIENT_SECRET ?? "test";
 
 app.use(express.json());
 app.use(morgan("common"));
+app.use(cors());
 
 app.get("/", (_req, res) => {
     res.sendStatus(418);
